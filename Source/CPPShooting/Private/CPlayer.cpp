@@ -3,6 +3,7 @@
 
 #include "CPlayer.h"
 #include "Components/BoxComponent.h"
+#include "CBullet.h"
 
 // Sets default values
 ACPlayer::ACPlayer()
@@ -31,6 +32,13 @@ ACPlayer::ACPlayer()
 		compMesh->SetRelativeRotation(FRotator(0, 90, 90));
 		//크기조절
 		compMesh->SetRelativeScale3D(FVector(4));
+	}
+
+	//총알 공장을 가져오자.
+	ConstructorHelpers::FClassFinder<ACBullet> tempBulletFactory(TEXT("/Script/Engine.Blueprint'/Game/Blueprints/BP_Bullet.BP_Bullet_C'"));
+	if (tempBulletFactory.Succeeded())
+	{
+		bulletFactory = tempBulletFactory.Class;
 	}
 }
 
@@ -62,6 +70,7 @@ void ACPlayer::Tick(float DeltaTime)
 	FVector vt = dir * moveSpeed * DeltaTime;
 	FVector p = p0 + vt;
 	SetActorLocation(p);
+	
 }
 
 // Called to bind functionality to input
@@ -73,6 +82,8 @@ void ACPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis(TEXT("Horizontal"), this, &ACPlayer::InputHorizontal);
 	//W, S 키 눌렀을 때 호출되는 함수 등록
 	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &ACPlayer::InputVertical);
+	//Fire 에 등록된 키가 눌렸을 때 호출되는 함수 등록
+	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &ACPlayer::InputFire);
 }
 
 void ACPlayer::InputHorizontal(float value)
@@ -85,4 +96,15 @@ void ACPlayer::InputVertical(float value)
 {
 	v = value;
 	//UE_LOG(LogTemp, Warning, TEXT("V : %f"), value);
+}
+
+void ACPlayer::InputFire()
+{
+	// 총알공장(BP_Bullet) 에서 총알을 하나 생성한다.
+	ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(bulletFactory);
+	// 생성된 총알을 나의 위치에 놓는다.
+	bullet->SetActorLocation( GetActorLocation() );
+
+	//또는
+	//GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
 }

@@ -41,6 +41,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float moveSpeed = 500;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ACBullet> bulletFactory;
+
+
 public:
 	//사용자 입력을 처리하는 함수
 	UFUNCTION()
@@ -48,4 +52,7 @@ public:
 
 	UFUNCTION()
 	void InputVertical(float value);
+
+	UFUNCTION()
+	void InputFire();
 };
