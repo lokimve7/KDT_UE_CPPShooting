@@ -71,6 +71,17 @@ void ACPlayer::Tick(float DeltaTime)
 	FVector p = p0 + vt;
 	SetActorLocation(p);
 	
+
+	// 현재시간을 증가
+	currTime += DeltaTime;
+	// 만약에 현재시간이 0.5 보다 크다면
+	if (currTime > 0.5f)
+	{
+		// 총알을 발사
+		InputFire();
+		// 현재시간 초기화
+		currTime = 0;
+	}
 }
 
 // Called to bind functionality to input

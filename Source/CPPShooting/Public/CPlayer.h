@@ -41,6 +41,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	float moveSpeed = 500;
 
+	UPROPERTY()
+	float currTime = 0;
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACBullet> bulletFactory;
 

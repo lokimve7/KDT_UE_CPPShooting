@@ -19,11 +19,23 @@ ACEnemy::ACEnemy()
 	RootComponent = compSphere;
 	// Sphere 의 반지름을 50으로 하자
 	compSphere->SetSphereRadius(50);
+	// Collision Enable 설정
+	compSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	// Object Type 설정 (Enemy로)
+	compSphere->SetCollisionObjectType(ECC_GameTraceChannel1);
+	// 모든 Response 를 Ignore 로 하자
+	compSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
+	// Bullet 은 Overlap 으로 하자
+	compSphere->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Overlap);
+	
 
 	// StaticMeshComponent 추가
 	compMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	// RootComponent 의 자식으로 설정
 	compMesh->SetupAttachment(RootComponent);
+	// Collision Prests 를 NoCollision 으로 하자
+	compMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
 	// 드론 모양을 읽어오자
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempMesh(TEXT("/Script/Engine.StaticMesh'/Game/Resources/Drone/Drone_low.Drone_low'"));
 	if (tempMesh.Succeeded())
