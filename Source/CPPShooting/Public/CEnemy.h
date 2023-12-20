@@ -38,4 +38,9 @@ public:
 
 	UPROPERTY()
 	FVector dir;
+
+public:
+	//Delegate 에 등록되는 함수는 UFUNCTION 을 꼭 써주자!
+	UFUNCTION()
+	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

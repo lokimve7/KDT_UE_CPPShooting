@@ -112,10 +112,17 @@ void ACPlayer::InputVertical(float value)
 void ACPlayer::InputFire()
 {
 	// 총알공장(BP_Bullet) 에서 총알을 하나 생성한다.
-	ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(bulletFactory);
-	// 생성된 총알을 나의 위치에 놓는다.
-	bullet->SetActorLocation( GetActorLocation() );
+	//ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(bulletFactory);
+	//if (bullet == nullptr)
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("bullet is null"));
+	//}
+	//else
+	//{
+	//	// 생성된 총알을 나의 위치에 놓는다.
+	//	bullet->SetActorLocation( GetActorLocation() );
+	//}
 
 	//또는
-	//GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
+	GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
 }

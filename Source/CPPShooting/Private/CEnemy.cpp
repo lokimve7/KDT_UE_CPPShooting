@@ -81,6 +81,10 @@ void ACEnemy::BeginPlay()
 	{
 		dir = -GetActorUpVector();
 	}	
+
+	// Overlap 충돌이 되었을 때 호출되는 함수 등록 (Delegate = 함수를 담을수 있는 변수)
+	compSphere->OnComponentBeginOverlap.AddDynamic(this, &ACEnemy::OnOverlap);
+
 }
 
 // Called every frame
@@ -94,6 +98,14 @@ void ACEnemy::Tick(float DeltaTime)
 	FVector p0 = GetActorLocation();
 	FVector vt = dir * moveSpeed * DeltaTime;
 	FVector p = p0 + vt;
-	SetActorLocation(p);
+	//SetActorLocation(p);
+}
+
+void ACEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// 부딪힌 놈 파괴
+	OtherActor->Destroy();
+	// 나를 파괴
+	Destroy();
 }
 

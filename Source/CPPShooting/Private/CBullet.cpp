@@ -15,12 +15,16 @@ ACBullet::ACBullet()
 	SetRootComponent(compBox);
 	// compBox 의 BoxExtent 의 값을 25, 25, 50 으로 하자
 	compBox->SetBoxExtent(FVector(25, 25, 50));
+	// compBox 의 Collision preset 을 Bullet 으로 하자
+	compBox->SetCollisionProfileName(TEXT("Bullet"));
 
 	// StaticMeshComponent 를 RootComponent 의 자식으로
 	compMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	compMesh->SetupAttachment(compBox); //(RootComponent)
 	// 크기를 0.5, 0.5, 1 로 하자
 	compMesh->SetRelativeScale3D(FVector(0.5f, 0.5f, 1));
+	// Collision preset 을 NoCollision 으로 하자
+	compMesh->SetCollisionProfileName(TEXT("NoCollision"));
 
 	// Cube 를 읽어와서 셋팅
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempMesh(TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cube.Cube'"));
