@@ -28,4 +28,20 @@ public:
 	UPROPERTY()
 	float currTime = 0;
 
+	//생성시간
+	UPROPERTY(EditAnywhere)
+	float createTime = 1;
+
+	//생성시간 최소값, 최대값
+	UPROPERTY(EditAnywhere)
+	float fMin = 1.0f;
+
+	UPROPERTY(EditAnywhere)
+	float fMax = 3.0f;
+
+	//Enemy 공장
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ACEnemy> enemyFactory;
+
+
 };
