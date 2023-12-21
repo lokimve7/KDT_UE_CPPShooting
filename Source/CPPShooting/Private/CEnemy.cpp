@@ -98,7 +98,7 @@ void ACEnemy::Tick(float DeltaTime)
 	FVector p0 = GetActorLocation();
 	FVector vt = dir * moveSpeed * DeltaTime;
 	FVector p = p0 + vt;
-	//SetActorLocation(p);
+	SetActorLocation(p);
 }
 
 void ACEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
