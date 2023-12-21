@@ -13,6 +13,11 @@ UCLASS()
 class CPPSHOOTING_API ACMainGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+
+public:
+	ACMainGameMode();
+
+	virtual void BeginPlay() override;
 	
 public:
 	UFUNCTION()
@@ -20,4 +25,13 @@ public:
 
 	UPROPERTY()
 	int32 currScore = 0;
+
+	UPROPERTY()
+	int32 bestSocre = 0;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCMainWidget> mainWidget;
+
+	UPROPERTY(EditAnywhere)
+	class UCMainWidget* mainUI;
 };
