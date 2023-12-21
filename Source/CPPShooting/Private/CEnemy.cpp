@@ -27,6 +27,8 @@ ACEnemy::ACEnemy()
 	compSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
 	// Bullet 은 Overlap 으로 하자
 	compSphere->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Overlap);
+	// Player 은 Overlap 으로 하자
+	compSphere->SetCollisionResponseToChannel(ECC_GameTraceChannel3, ECR_Overlap);
 	
 
 	// StaticMeshComponent 추가
@@ -61,11 +63,12 @@ void ACEnemy::BeginPlay()
 	if (rand < 5)
 	{
 		// 처음에 한번 플레이어를 향하는 방향을 구하고
-		// 플레이어를 찾자.
-		if (target == nullptr)
-		{
-			target = UGameplayStatics::GetActorOfClass(GetWorld(), ACPlayer::StaticClass());
+		// 플레이어를 찾자.		
+		target = UGameplayStatics::GetActorOfClass(GetWorld(), ACPlayer::StaticClass());
 
+		// 플레이어를 잘 찾았다면
+		if (target != nullptr)
+		{
 			// 1. 플레이어를 향하는 방향을 구하자 (player 위치 - 나(Enemy)의 위치)
 			FVector playerPos = target->GetActorLocation();
 			dir = playerPos - GetActorLocation();
@@ -74,6 +77,10 @@ void ACEnemy::BeginPlay()
 			// 2. 방향의 크기를 1로 바꾸자
 			dir.Normalize();		//---> dir 의 크기가 1이된다.
 			//dir.GetSafeNormal();	//---> dir 의 크기가 유지, dir의 크기를 1로만들었을때의 Vector 반환
+		}				
+		else
+		{
+			dir = -GetActorUpVector();
 		}
 	}
 	// 50% 확률로 방향을 아래로 향하게
@@ -84,7 +91,7 @@ void ACEnemy::BeginPlay()
 
 	// Overlap 충돌이 되었을 때 호출되는 함수 등록 (Delegate = 함수를 담을수 있는 변수)
 	compSphere->OnComponentBeginOverlap.AddDynamic(this, &ACEnemy::OnOverlap);
-
+	
 }
 
 // Called every frame

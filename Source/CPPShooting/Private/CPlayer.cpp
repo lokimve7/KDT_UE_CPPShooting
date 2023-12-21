@@ -15,11 +15,22 @@ ACPlayer::ACPlayer()
 	compBox = CreateDefaultSubobject<UBoxComponent>(TEXT("BOX"));
 	//BoxComponent 를 RootComponent 로 만들자
 	SetRootComponent(compBox); // 또는 RootComponent = compBox;
+	//Collision Enable 설정(물리적인 충돌, 감지 충돌, 둘 다 허용)
+	compBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	//Object Type
+	compBox->SetCollisionObjectType(ECC_GameTraceChannel3);
+	//모든 Response 를 Ignore 하자
+	compBox->SetCollisionResponseToAllChannels(ECR_Ignore);
+	//Enemy 를 Overlap 으로 하자
+	compBox->SetCollisionResponseToChannel(ECC_GameTraceChannel1, ECR_Overlap);
 	
 	//StaticeMeshComponent 추가
 	compMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
 	//compMesh 를 RootComponent 의 자식으로 설정
 	compMesh->SetupAttachment(RootComponent);
+	//Collision Preset 을 NoCollision으로 하자
+	compMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
 	//모양(StaticMesh) 을 읽어들여서 셋팅하자
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempMesh(TEXT("/Script/Engine.StaticMesh'/Game/Resources/SpaceShip/Spaceship_ARA.Spaceship_ARA'"));
 	//만약에 잘 읽어들였다면
