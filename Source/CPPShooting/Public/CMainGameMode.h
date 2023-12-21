@@ -14,4 +14,10 @@ class CPPSHOOTING_API ACMainGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION()
+	void AddScore(int32 value);
+
+	UPROPERTY()
+	int32 currScore = 0;
 };

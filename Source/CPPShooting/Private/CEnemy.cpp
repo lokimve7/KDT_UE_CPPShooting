@@ -7,11 +7,12 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "CPlayer.h"
 #include "Particles/ParticleSystem.h"
+#include "CMainGameMode.h"
 
 // Sets default values
 ACEnemy::ACEnemy()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Sphere Component 추가
@@ -30,7 +31,8 @@ ACEnemy::ACEnemy()
 	compSphere->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Overlap);
 	// Player 은 Overlap 으로 하자
 	compSphere->SetCollisionResponseToChannel(ECC_GameTraceChannel3, ECR_Overlap);
-	
+	// DestroyZone 은 Overlap 으로 하자
+	compSphere->SetCollisionResponseToChannel(ECC_GameTraceChannel4, ECR_Overlap);
 
 	// StaticMeshComponent 추가
 	compMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MESH"));
@@ -91,7 +93,7 @@ void ACEnemy::BeginPlay()
 			// 2. 방향의 크기를 1로 바꾸자
 			dir.Normalize();		//---> dir 의 크기가 1이된다.
 			//dir.GetSafeNormal();	//---> dir 의 크기가 유지, dir의 크기를 1로만들었을때의 Vector 반환
-		}				
+		}
 		else
 		{
 			dir = -GetActorUpVector();
@@ -101,21 +103,21 @@ void ACEnemy::BeginPlay()
 	else
 	{
 		dir = -GetActorUpVector();
-	}	
+	}
 
 	// Overlap 충돌이 되었을 때 호출되는 함수 등록 (Delegate = 함수를 담을수 있는 변수)
 	compSphere->OnComponentBeginOverlap.AddDynamic(this, &ACEnemy::OnOverlap);
-	
+
 }
 
 // Called every frame
 void ACEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	
+
+
 	// 그 방향으로 계속 이동하고싶다.
-	// 3. P = P0 + vt  를 이용해서 구한 방향으로 계속 움지이자.
+// 3. P = P0 + vt  를 이용해서 구한 방향으로 계속 움지이자.
 	FVector p0 = GetActorLocation();
 	FVector vt = dir * moveSpeed * DeltaTime;
 	FVector p = p0 + vt;
@@ -124,15 +126,27 @@ void ACEnemy::Tick(float DeltaTime)
 
 void ACEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// 폭발 소리 내자
-	UGameplayStatics::PlaySound2D(GetWorld(), exploSound);
+	// 부딪힌 액터가 Bullet 이라면 
+	if (OtherActor->GetName().Contains(TEXT("Bullet")))
+	{
+		// 폭발 소리 내자
+		UGameplayStatics::PlaySound2D(GetWorld(), exploSound);
 
-	// 폭발 효과 보여주자.
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), exploEffect, GetActorLocation(), GetActorRotation());
+		// 폭발 효과 보여주자.
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), exploEffect, GetActorLocation(), GetActorRotation());
 
-	// 부딪힌 놈 파괴
-	OtherActor->Destroy();
-	// 나를 파괴
-	Destroy();
+		// 현재 게임 모드를 가져오자
+		AGameModeBase* mode = UGameplayStatics::GetGameMode(GetWorld());
+		// 가져온 게임 모드를 ACMainGameMode 형으로 변환
+		ACMainGameMode* mainMode = Cast<ACMainGameMode>(mode);
+		// 점수를 증가
+		mainMode->AddScore(10);
+
+		// 부딪힌 놈 파괴
+		OtherActor->Destroy();
+		// 나를 파괴
+		Destroy();
+	}
+
 }
 
