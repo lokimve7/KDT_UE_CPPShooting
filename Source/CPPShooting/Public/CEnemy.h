@@ -39,6 +39,12 @@ public:
 	UPROPERTY()
 	FVector dir;
 
+	UPROPERTY()
+	class USoundBase* exploSound;
+
+	UPROPERTY()
+	class UParticleSystem* exploEffect;
+
 public:
 	//Delegate 에 등록되는 함수는 UFUNCTION 을 꼭 써주자!
 	UFUNCTION()

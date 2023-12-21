@@ -4,6 +4,8 @@
 #include "CPlayer.h"
 #include "Components/BoxComponent.h"
 #include "CBullet.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 ACPlayer::ACPlayer()
@@ -50,6 +52,13 @@ ACPlayer::ACPlayer()
 	if (tempBulletFactory.Succeeded())
 	{
 		bulletFactory = tempBulletFactory.Class;
+	}
+
+	//총알 소리 가져오자.
+	ConstructorHelpers::FObjectFinder<USoundBase> tempSound(TEXT("/Script/Engine.SoundWave'/Game/Resources/star-wars-blaster.star-wars-blaster'"));
+	if (tempSound.Succeeded())
+	{
+		fireSound = tempSound.Object;
 	}
 }
 
@@ -136,4 +145,7 @@ void ACPlayer::InputFire()
 
 	//또는
 	GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
+
+	// 총알 발사 소리
+	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
 }

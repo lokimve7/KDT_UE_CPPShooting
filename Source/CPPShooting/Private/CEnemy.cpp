@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "CPlayer.h"
+#include "Particles/ParticleSystem.h"
 
 // Sets default values
 ACEnemy::ACEnemy()
@@ -49,6 +50,19 @@ ACEnemy::ACEnemy()
 	compMesh->SetRelativeLocation(FVector(50, 0, 0));
 	// Pitch, yaw, roll (y, z, x)
 	compMesh->SetRelativeRotation(FRotator(0, 90, 90));
+
+	// 폭발 소리 가져오자
+	ConstructorHelpers::FObjectFinder<USoundBase> tempSound(TEXT("/Script/Engine.SoundWave'/Game/StarterContent/Audio/Explosion01.Explosion01'"));
+	if (tempSound.Succeeded())
+	{
+		exploSound = tempSound.Object;
+	}
+	// 폭발 효과 가져오자
+	ConstructorHelpers::FObjectFinder<UParticleSystem> tempEffect(TEXT("/Script/Engine.ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"));
+	if (tempEffect.Succeeded())
+	{
+		exploEffect = tempEffect.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -110,6 +124,12 @@ void ACEnemy::Tick(float DeltaTime)
 
 void ACEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	// 폭발 소리 내자
+	UGameplayStatics::PlaySound2D(GetWorld(), exploSound);
+
+	// 폭발 효과 보여주자.
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), exploEffect, GetActorLocation(), GetActorRotation());
+
 	// 부딪힌 놈 파괴
 	OtherActor->Destroy();
 	// 나를 파괴

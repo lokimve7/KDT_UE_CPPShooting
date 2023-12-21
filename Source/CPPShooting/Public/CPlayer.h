@@ -47,6 +47,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACBullet> bulletFactory;
 
+	UPROPERTY(EditAnywhere)
+	class USoundBase* fireSound;
+
 
 public:
 	//사용자 입력을 처리하는 함수
