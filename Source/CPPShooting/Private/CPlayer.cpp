@@ -70,6 +70,37 @@ void ACPlayer::BeginPlay()
 	
 	// 충돌 되었을 때 호출되는 함수 등록
 	compBox->OnComponentBeginOverlap.AddDynamic(this, &ACPlayer::OnOverlap);
+
+
+	// TArray 사용 예시
+	TArray<float> arrayNum;
+
+	// 추가
+	arrayNum.Add(10);
+	arrayNum.Add(20);
+	arrayNum.Add(moveSpeed);
+
+	for (int32 i = 0; i < arrayNum.Num(); i++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%d : %f"), i, arrayNum[i]);
+	}
+
+	// 삭제
+	//arrayNum.RemoveAt(1);
+	arrayNum.Remove(20);
+
+	for (int32 i = 0; i < arrayNum.Num(); i++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%d : %f"), i, arrayNum[i]);
+	}
+
+	// 중간 삽입
+	arrayNum.Insert(100, 1);
+
+	for (int32 i = 0; i < arrayNum.Num(); i++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%d : %f"), i, arrayNum[i]);
+	}
 }
 
 // Called every frame
@@ -164,6 +195,9 @@ void ACPlayer::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Other
 
 		// 마우스 포이터 보이게 하자
 		GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
+
+		// 게임을 일시 정지
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
 
 		// 부딪힌 액터 파괴
 		OtherActor->Destroy();

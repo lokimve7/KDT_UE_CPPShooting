@@ -22,8 +22,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UButton* btnRetry;
 
+	UPROPERTY(EditAnywhere)
+	class UButton* btnQuit;
+
 public:
 	UFUNCTION()
 	void OnClickRetry();
-	
+
+	UFUNCTION()
+	void OnClickQuit();	
 };
