@@ -13,6 +13,8 @@ UCLASS()
 class CPPSHOOTING_API UCMainWidget : public UUserWidget
 {
 	GENERATED_BODY()
+public:
+	virtual void NativeConstruct() override;
 	
 public:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
