@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "CBullet.h"
 #include "Kismet/GameplayStatics.h"
+#include "CMainGameMode.h"
 
 
 // Sets default values
@@ -67,6 +68,8 @@ void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// 충돌 되었을 때 호출되는 함수 등록
+	compBox->OnComponentBeginOverlap.AddDynamic(this, &ACPlayer::OnOverlap);
 }
 
 // Called every frame
@@ -148,4 +151,24 @@ void ACPlayer::InputFire()
 
 	// 총알 발사 소리
 	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
+}
+
+void ACPlayer::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// 만약에 충돌한 액터가 Enemy 라면
+	if (OtherActor->GetName().Contains(TEXT("Enemy")))
+	{
+		// GameOverWidget 띄우자
+		ACMainGameMode* currGameMode = GetWorld()->GetAuthGameMode<ACMainGameMode>();
+		currGameMode->ShowGameOverUI();
+
+		// 마우스 포이터 보이게 하자
+		GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
+
+		// 부딪힌 액터 파괴
+		OtherActor->Destroy();
+
+		// 나도 파괴
+		Destroy();
+	}	
 }

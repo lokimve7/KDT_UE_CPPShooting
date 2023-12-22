@@ -23,6 +23,16 @@ public:
 	UFUNCTION()
 	void AddScore(int32 value);
 
+	UFUNCTION()
+	void SaveData();
+
+	UFUNCTION()
+	void LoadData();
+
+	UFUNCTION()
+	void ShowGameOverUI();
+
+
 	UPROPERTY()
 	int32 currScore = 0;
 
@@ -34,4 +44,10 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UCMainWidget* mainUI;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCGameOverWidget> gameOverWidget;
+
+	UPROPERTY(EditAnywhere)
+	class UCGameOverWidget* gameOverUI;
 };
