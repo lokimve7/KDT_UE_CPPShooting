@@ -28,10 +28,34 @@ void ACPPStudy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (isMove == true)
+	{
+		//거리 = 시간 * 속력
+		FVector p0 = GetActorLocation();
+		FVector vt = GetActorRightVector() * 150 * DeltaTime;
+		FVector p = p0 + vt;
 
+		// 이동거리만큼 distance 빼주자
+		distance -= 150 * DeltaTime;
+
+		// 만약에 이동한 거리가 0보다 크다면?
+		if (distance > 0)
+		{
+			SetActorLocation(p);
+		}
+		// 만약에 이동한 거리가 0보다 작니?
+		else if (distance < 0)
+		{
+			p = p + GetActorRightVector() * distance;
+			SetActorLocation(p);
+			distance = 0;
+		}
+	}
 }
 
 void ACPPStudy::InputFire()
 {
 	UE_LOG(LogTemp, Warning, TEXT("InputFire"));
+
+	isMove = true;
 }

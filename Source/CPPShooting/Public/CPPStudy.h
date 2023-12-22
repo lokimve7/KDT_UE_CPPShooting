@@ -25,4 +25,8 @@ public:
 
 	void InputFire();
 
+	// 이동해야 하는 거리
+	float distance = 500;
+
+	bool isMove = false;
 };
