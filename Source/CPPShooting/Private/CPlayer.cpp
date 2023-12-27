@@ -78,6 +78,8 @@ void ACPlayer::BeginPlay()
 		ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(bulletFactory);
 		// 2. 생성된 총알을 탄창에 넣는다.
 		magazine.Add(bullet);
+		// 3. 생성된 총알을 비활성화 한다.
+		bullet->SetAcitve(false);
 	}
 
 	// TArray 사용 예시
@@ -186,10 +188,23 @@ void ACPlayer::InputFire()
 	//}
 
 	//또는
-	GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
+	//GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
 
-	// 총알 발사 소리
-	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
+	// 0. 만약에 탄창에 총알이 있다면
+	if (magazine.Num() > 0)
+	{
+		// 1. 탄창의 0번째 총알을 지역변수에 담는다. 
+		ACBullet* bullet = magazine[0];
+		// 2. 담은 총알을 활성화 시킨다.
+		bullet->SetAcitve(true);
+		// 3. 담은 총알을 나(Player) 의 위치에 놓는다.
+		bullet->SetActorLocation(GetActorLocation());
+		// 4. 탄창에서 0번째를 뺀다.
+		magazine.RemoveAt(0);
+
+		// 총알 발사 소리
+		UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
+	}	
 }
 
 void ACPlayer::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

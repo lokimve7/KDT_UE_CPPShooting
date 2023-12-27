@@ -33,4 +33,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float moveSpeed = 800;
 
+	UFUNCTION()
+	void SetAcitve(bool isActive);
+
+	// 탄창에 나를 넣자
+	UFUNCTION()
+	void InsertMagazine();
 };

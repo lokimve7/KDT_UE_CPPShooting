@@ -8,6 +8,7 @@
 #include "CPlayer.h"
 #include "Particles/ParticleSystem.h"
 #include "CMainGameMode.h"
+#include "CBullet.h"
 
 // Sets default values
 ACEnemy::ACEnemy()
@@ -143,7 +144,12 @@ void ACEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		mainMode->AddScore(10);
 
 		// ºÎµúÈù ³ğ ÆÄ±«
-		OtherActor->Destroy();
+		// OtherActor->Destroy();
+		// ºÎµúÈù ³ğ ÅºÃ¢¿¡ ³ÖÀÚ.
+		/*ACBullet* bullet = Cast<ACBullet>(OtherActor);
+		bullet->InsertMagazine();*/		
+		Cast<ACBullet>(OtherActor)->InsertMagazine();
+
 		// ³ª¸¦ ÆÄ±«
 		Destroy();
 	}

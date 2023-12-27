@@ -3,6 +3,8 @@
 
 #include "CBullet.h"
 #include "Components/BoxComponent.h"
+#include <Kismet/GameplayStatics.h>
+#include "CPlayer.h"
 
 // Sets default values
 ACBullet::ACBullet()
@@ -58,5 +60,41 @@ void ACBullet::Tick(float DeltaTime)
 	FVector vt = GetActorUpVector() * moveSpeed * DeltaTime;
 	FVector p = p0 + vt;
 	SetActorLocation(p);
+}
+
+void ACBullet::SetAcitve(bool isActive)
+{
+	// 만약에 isActive 가 true 면
+	if (isActive == true)
+	{
+		// 모양(mesh) 를 보이게 하자
+		compMesh->SetVisibility(isActive);
+		// 충돌 할 수 있게 하자
+		compBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+	// 그렇지 않으면
+	else
+	{
+		// 모양(mesh) 를 안보이게 하자
+		compMesh->SetVisibility(isActive);
+		// 충돌 하지 않게 하자
+		compBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+}
+
+void ACBullet::InsertMagazine()
+{
+	// 1. Player 를 찾자
+	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ACPlayer::StaticClass());
+
+	// 2. 만약에 player 를 찾지 못했으면 함수를 나가라.
+	if (actor == nullptr) return;
+	
+	// 3. ACPlayer 로 형변환
+	ACPlayer* player = Cast<ACPlayer>(actor);
+	// 4. 나를 Player 가 가지고 있는 탄창에 넣자
+	player->magazine.Add(this);
+	// 5. 나를 비활성화
+	SetAcitve(false);
 }
 

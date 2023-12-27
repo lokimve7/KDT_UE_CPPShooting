@@ -3,6 +3,7 @@
 
 #include "CDestroyZone.h"
 #include "Components/BoxComponent.h"
+#include "CBullet.h"
 
 // Sets default values
 ACDestroyZone::ACDestroyZone()
@@ -38,7 +39,15 @@ void ACDestroyZone::Tick(float DeltaTime)
 
 void ACDestroyZone::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// ºÎµúÈù ¾×ÅÍ ÆÄ±«ÇÏÀÚ
-	OtherActor->Destroy();
+	// ¸¸¾à¿¡ ÃÑ¾ËÀÌ ¾Æ´Ï¸é
+	if (OtherComp->GetCollisionObjectType() != ECollisionChannel::ECC_GameTraceChannel2)
+	{
+		// ºÎµúÈù ¾×ÅÍ ÆÄ±«ÇÏÀÚ
+		OtherActor->Destroy();
+	}	
+	else
+	{
+		Cast<ACBullet>(OtherActor)->InsertMagazine();
+	}
 }
 
