@@ -71,6 +71,14 @@ void ACPlayer::BeginPlay()
 	// 충돌 되었을 때 호출되는 함수 등록
 	compBox->OnComponentBeginOverlap.AddDynamic(this, &ACPlayer::OnOverlap);
 
+	// 탄창에 총알을 만들어서 넣자
+	for (int32 i = 0; i < 5; i++)
+	{
+		// 1. 총알을 생성한다.
+		ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(bulletFactory);
+		// 2. 생성된 총알을 탄창에 넣는다.
+		magazine.Add(bullet);
+	}
 
 	// TArray 사용 예시
 	TArray<float> arrayNum;
@@ -132,7 +140,7 @@ void ACPlayer::Tick(float DeltaTime)
 	if (currTime > 0.5f)
 	{
 		// 총알을 발사
-		InputFire();
+		//InputFire();
 		// 현재시간 초기화
 		currTime = 0;
 	}

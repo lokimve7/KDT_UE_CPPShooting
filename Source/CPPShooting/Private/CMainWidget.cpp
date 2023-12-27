@@ -13,7 +13,7 @@ void UCMainWidget::NativeConstruct()
 	// 1. Slot 을 가져와서 (부모의Pointer  로 반환) Canvas Panel Slot 으로 형변환
 	UCanvasPanelSlot* slot = Cast<UCanvasPanelSlot>(currScoreUI->Slot);	
 	// 2. 위치 변경
-	slot->SetPosition(FVector2D(500, 500));
+	// slot->SetPosition(FVector2D(500, 500));
 	// 3. 색상 변경 (120/255, 50/255, 200/255)
 	currScoreUI->SetColorAndOpacity(FLinearColor(120/255.0f, 50/255.0f, 200/255.0f, 1));
 }

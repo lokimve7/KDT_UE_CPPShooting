@@ -50,6 +50,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	class USoundBase* fireSound;
 
+	// 총알을 여러개 들고 있는 변수 (탄창)
+	UPROPERTY(VisibleAnywhere)
+	TArray<class ACBullet*> magazine;
+
 
 public:
 	//사용자 입력을 처리하는 함수
