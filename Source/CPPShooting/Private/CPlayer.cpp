@@ -6,7 +6,23 @@
 #include "CBullet.h"
 #include "Kismet/GameplayStatics.h"
 #include "CMainGameMode.h"
+#include <Blueprint/WidgetLayoutLibrary.h>
 
+class Test
+{
+public:
+	Test()
+	{
+
+	}
+
+	int num1 = 100;
+
+	void Sum()
+	{
+
+	}
+};
 
 // Sets default values
 ACPlayer::ACPlayer()
@@ -68,6 +84,7 @@ void ACPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
 	// 충돌 되었을 때 호출되는 함수 등록
 	compBox->OnComponentBeginOverlap.AddDynamic(this, &ACPlayer::OnOverlap);
 
@@ -82,35 +99,7 @@ void ACPlayer::BeginPlay()
 		bullet->SetAcitve(false);
 	}
 
-	// TArray 사용 예시
-	TArray<float> arrayNum;
-
-	// 추가
-	arrayNum.Add(10);
-	arrayNum.Add(20);
-	arrayNum.Add(moveSpeed);
-
-	for (int32 i = 0; i < arrayNum.Num(); i++)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%d : %f"), i, arrayNum[i]);
-	}
-
-	// 삭제
-	//arrayNum.RemoveAt(1);
-	arrayNum.Remove(20);
-
-	for (int32 i = 0; i < arrayNum.Num(); i++)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%d : %f"), i, arrayNum[i]);
-	}
-
-	// 중간 삽입
-	arrayNum.Insert(100, 1);
-
-	for (int32 i = 0; i < arrayNum.Num(); i++)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%d : %f"), i, arrayNum[i]);
-	}
+	
 }
 
 // Called every frame
@@ -133,8 +122,30 @@ void ACPlayer::Tick(float DeltaTime)
 
 	FVector vt = dir * moveSpeed * DeltaTime;
 	FVector p = p0 + vt;
+
+	// 화면을 벗어났는지 체크
+	// 화면의 크기를 가져오자
+	FVector2D screenSize = UWidgetLayoutLibrary::GetViewportSize(GetWorld());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *(screenSize.ToString()));
+	// Player 위치 를 screen 의 좌표로 변환
+	FVector2D playerScreenPos;
+	GetWorld()->GetFirstPlayerController()->ProjectWorldLocationToScreen(p, playerScreenPos);
+	// screen 좌표를 3D 좌표로 변환
+	//GetWorld()->GetFirstPlayerController()->DeprojectScreenPositionToWorld()
+
+	if (playerScreenPos.X < 50 ||
+		playerScreenPos.X > screenSize.X - 50)
+	{
+		p.Y = GetActorLocation().Y;
+	}
+
+	if (playerScreenPos.Y < 50 ||
+		playerScreenPos.Y > screenSize.Y - 50)
+	{
+		p.Z = GetActorLocation().Z;
+	}
+
 	SetActorLocation(p);
-	
 
 	// 현재시간을 증가
 	currTime += DeltaTime;
@@ -201,10 +212,16 @@ void ACPlayer::InputFire()
 		bullet->SetActorLocation(GetActorLocation());
 		// 4. 탄창에서 0번째를 뺀다.
 		magazine.RemoveAt(0);
-
-		// 총알 발사 소리
-		UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
 	}	
+	// 탄창에 총알 없다면
+	else
+	{
+		// 총알 생성
+		GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
+	}
+
+	// 총알 발사 소리
+	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
 }
 
 void ACPlayer::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

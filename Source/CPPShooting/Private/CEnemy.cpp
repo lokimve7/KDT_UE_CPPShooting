@@ -94,6 +94,10 @@ void ACEnemy::BeginPlay()
 			// 2. 방향의 크기를 1로 바꾸자
 			dir.Normalize();		//---> dir 의 크기가 1이된다.
 			//dir.GetSafeNormal();	//---> dir 의 크기가 유지, dir의 크기를 1로만들었을때의 Vector 반환
+
+			// 3. 위방향 (-dir), 앞방향(자신의 앞방향) 방향을 이용해서 각도를 계산
+			FRotator rot = UKismetMathLibrary::MakeRotFromZX(-dir, GetActorForwardVector());
+			SetActorRotation(rot);			
 		}
 		else
 		{
@@ -142,6 +146,9 @@ void ACEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 		ACMainGameMode* mainMode = Cast<ACMainGameMode>(mode);
 		// 점수를 증가
 		mainMode->AddScore(10);
+
+		float a = 10.1;
+		int b = (int)a;
 
 		// 부딪힌 놈 파괴
 		// OtherActor->Destroy();

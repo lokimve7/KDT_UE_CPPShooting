@@ -96,5 +96,7 @@ void ACBullet::InsertMagazine()
 	player->magazine.Add(this);
 	// 5. 나를 비활성화
 	SetAcitve(false);
+
+
 }
 
