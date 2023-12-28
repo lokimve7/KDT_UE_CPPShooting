@@ -44,10 +44,6 @@ void ACDestroyZone::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	{
 		// ºÎµúÈù ¾×ÅÍ ÆÄ±«ÇÏÀÚ
 		OtherActor->Destroy();
-	}	
-	else
-	{
-		Cast<ACBullet>(OtherActor)->InsertMagazine();
-	}
+	}		
 }
 

@@ -97,6 +97,8 @@ void ACPlayer::BeginPlay()
 		magazine.Add(bullet);
 		// 3. 생성된 총알을 비활성화 한다.
 		bullet->SetAcitve(false);
+		// 4. 생성된 총알이 가지고 있는 Delegate 에 InsertBullet 함수를 등록
+		bullet->insertMagazineDel.BindUObject(this, &ACPlayer::InsertBullet);
 	}
 
 	
@@ -217,7 +219,8 @@ void ACPlayer::InputFire()
 	else
 	{
 		// 총알 생성
-		GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
+		ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
+		bullet->insertMagazineDel.BindUObject(this, &ACPlayer::InsertBullet);
 	}
 
 	// 총알 발사 소리
@@ -245,4 +248,13 @@ void ACPlayer::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Other
 		// 나도 파괴
 		Destroy();
 	}	
+}
+
+void ACPlayer::InsertBullet(ACBullet* bullet)
+{
+	// 탄창에 bullet 넣는다.
+	magazine.Add(bullet);
+
+	// 총알을 비화성화
+	bullet->SetAcitve(false);
 }

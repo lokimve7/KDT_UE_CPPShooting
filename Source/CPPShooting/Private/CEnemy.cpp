@@ -147,16 +147,6 @@ void ACEnemy::OnOverlap(UPrimitiveComponent* abc, AActor* OtherActor, UPrimitive
 		// Á¡¼ö¸¦ Áõ°¡
 		mainMode->AddScore(10);
 
-		float a = 10.1;
-		int b = (int)a;
-
-		// ºÎµúÈù ³ğ ÆÄ±«
-		// OtherActor->Destroy();
-		// ºÎµúÈù ³ğ ÅºÃ¢¿¡ ³ÖÀÚ.
-		/*ACBullet* bullet = Cast<ACBullet>(OtherActor);
-		bullet->InsertMagazine();*/		
-		Cast<ACBullet>(OtherActor)->InsertMagazine();
-
 		// ³ª¸¦ ÆÄ±«
 		Destroy();
 	}

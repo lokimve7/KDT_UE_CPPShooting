@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "CBullet.generated.h"
 
+DECLARE_DELEGATE_OneParam(FInsertMagazine, ACBullet*);
+
 UCLASS()
 class CPPSHOOTING_API ACBullet : public AActor
 {
@@ -36,7 +38,8 @@ public:
 	UFUNCTION()
 	void SetAcitve(bool isActive);
 
-	// 탄창에 나를 넣자
 	UFUNCTION()
-	void InsertMagazine();
+	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	FInsertMagazine insertMagazineDel;
 };

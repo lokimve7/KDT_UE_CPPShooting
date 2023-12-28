@@ -48,6 +48,9 @@ ACBullet::ACBullet()
 void ACBullet::BeginPlay()
 {
 	Super::BeginPlay();	
+
+	// 충돌이 되면 호출되 함수 등록
+	compBox->OnComponentBeginOverlap.AddDynamic(this, &ACBullet::OnOverlap);
 }
 
 // Called every frame
@@ -82,21 +85,22 @@ void ACBullet::SetAcitve(bool isActive)
 	}
 }
 
-void ACBullet::InsertMagazine()
+
+void ACBullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// 1. Player 를 찾자
-	AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ACPlayer::StaticClass());
+	insertMagazineDel.ExecuteIfBound(this);
 
-	// 2. 만약에 player 를 찾지 못했으면 함수를 나가라.
-	if (actor == nullptr) return;
-	
-	// 3. ACPlayer 로 형변환
-	ACPlayer* player = Cast<ACPlayer>(actor);
-	// 4. 나를 Player 가 가지고 있는 탄창에 넣자
-	player->magazine.Add(this);
-	// 5. 나를 비활성화
-	SetAcitve(false);
+	//// 1. Player 를 찾자
+	//AActor* actor = UGameplayStatics::GetActorOfClass(GetWorld(), ACPlayer::StaticClass());
 
+	//// 2. 만약에 player 를 찾지 못했으면 함수를 나가라.
+	//if (actor == nullptr) return;
 
+	//// 3. ACPlayer 로 형변환
+	//ACPlayer* player = Cast<ACPlayer>(actor);
+	//// 4. 나를 Player 가 가지고 있는 탄창에 넣자
+	//player->magazine.Add(this);
+	//// 5. 나를 비활성화
+	//SetAcitve(false);
 }
 
