@@ -57,21 +57,21 @@ void ACPPStudy::BeginPlay()
 
 
 	// TArray 사용 예시
-	TArray<UserInfo> arrayUserInfo;
+	TArray<UserInfo*> arrayUserInfo;
 	UserInfo pUser(10, 20);
-	arrayUserInfo.Add(pUser);
+	arrayUserInfo.Add(&pUser);
 
 	UserInfo pUser2(5, 30);
-	arrayUserInfo.Add(pUser2);
+	arrayUserInfo.Add(&pUser2);
 
 	UserInfo pUser3(25, 3);
-	arrayUserInfo.Add(pUser3);
+	arrayUserInfo.Add(&pUser3);
 
 	arrayUserInfo.Sort(FSortByUserInfo());
 
 	for (int32 i = 0; i < arrayUserInfo.Num(); i++)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%d"),  arrayUserInfo[i].age);
+		UE_LOG(LogTemp, Warning, TEXT("%d"),  arrayUserInfo[i]->age);
 	}
 
 
@@ -84,9 +84,10 @@ void ACPPStudy::BeginPlay()
 	arrayNum.Add(45);
 	arrayNum.Add(1);
 
+
 	// 숫자를 오름차순으로 정렬
 	//arrayNum.Sort();
-	arrayNum.Sort(FSortByNumber());
+	//arrayNum.Sort(FSortByNumber());
 
 	for (int32 i = 0; i < arrayNum.Num(); i++)
 	{
