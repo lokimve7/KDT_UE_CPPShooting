@@ -18,6 +18,12 @@ DECLARE_MULTICAST_DELEGATE(FMultiDel);
 // 매개변수가 있는 함수를 여러개 등록할 수 있는 딜리게이트
 DECLARE_MULTICAST_DELEGATE_TwoParams(FMultiTwoParamDel, int32, FString);
 
+// 매개변수가 없는 함수를 하나 등록할 수 있는 딜리게이트 (블루프린트에서 사용가능)
+DECLARE_DYNAMIC_DELEGATE(FDynamicDel);
+
+// 매개변수가 있는 함수를 하나 등록할 수 있는 딜리게이트 (블루프린트에서 사용가능)
+DECLARE_DYNAMIC_DELEGATE_OneParam(FDynamicOneParamDel, FString, name);
+
 
 UCLASS()
 class CPPSHOOTING_API ADelegateStudy : public AActor
@@ -64,4 +70,15 @@ public:
 	void MultiTwoParamDel1(int32 num, FString str);
 	UFUNCTION()
 	void MultiTwoParamDel2(int32 num, FString str);
+
+	//---------------------------
+	UPROPERTY(BlueprintReadWrite)
+	FDynamicDel dynamicDel;
+	UFUNCTION()
+	void DynamicDelFunc();
+
+	//---------------------------
+	FDynamicOneParamDel dynamicOneparamDel;
+	UFUNCTION()
+	void DynamicOneParamDel(FString name);
 };

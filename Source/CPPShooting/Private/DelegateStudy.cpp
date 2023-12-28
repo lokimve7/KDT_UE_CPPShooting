@@ -54,6 +54,12 @@ void ADelegateStudy::BeginPlay()
 	multiTwoParamDel.AddLambda([this](int32 num, FString str) -> void {
 		UE_LOG(LogTemp, Warning, TEXT("Call multiTwoParamDel by Lambda - %d, %s"), num, *str);
 	});
+
+	// DECLARE_DYNAMIC_DELEGATE 함수 등록
+	//dynamicDel.BindUFunction(this, TEXT("DynamicDelFunc"));
+
+	// DECLARE_DYNAMIC_DELEGATE_OneParam 함수 등록
+	dynamicOneparamDel.BindUFunction(this, TEXT("SimpleOneParamDelFunc"));
 }
 
 // Called every frame
@@ -87,6 +93,16 @@ void ADelegateStudy::InputTest()
 	multiTwoParamDel.Clear();
 	//multiTwoParamDel.RemoveAll(this);
 	//multiTwoParamDel.Remove( Add 할 당시의 리턴값을 변수에 저장해서 그 변수 )
+
+	// DECLARE_DYNAMIC_DELEGATE 에 들어있는 함수 호출
+	dynamicDel.ExecuteIfBound();
+	// DECLARE_DYNAMIC_DELEGATE 의 함수 제거
+	dynamicDel.Unbind();
+
+	// DECLARE_DYNAMIC_DELEGATE_OneParam 에 들어있는 함수 호출
+	dynamicOneparamDel.ExecuteIfBound(TEXT("Good Morning"));
+	// DECLARE_DYNAMIC_DELEGATE_OneParam 의 함수 제거
+	dynamicOneparamDel.Unbind();
 }
 
 void ADelegateStudy::SimpleDelFunc()
@@ -117,5 +133,15 @@ void ADelegateStudy::MultiTwoParamDel1(int32 num, FString str)
 void ADelegateStudy::MultiTwoParamDel2(int32 num, FString str)
 {
 	UE_LOG(LogTemp, Warning, TEXT("MultiTwoParamDel2 - %d, %s"), num, *str);
+}
+
+void ADelegateStudy::DynamicDelFunc()
+{
+	UE_LOG(LogTemp, Warning, TEXT("DynamicDelFunc"));
+}
+
+void ADelegateStudy::DynamicOneParamDel(FString name)
+{
+	UE_LOG(LogTemp, Warning, TEXT("DynamicOneParamDel - %s"), *name);
 }
 

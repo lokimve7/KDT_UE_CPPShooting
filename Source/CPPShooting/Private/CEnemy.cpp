@@ -129,7 +129,7 @@ void ACEnemy::Tick(float DeltaTime)
 	SetActorLocation(p);
 }
 
-void ACEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ACEnemy::OnOverlap(UPrimitiveComponent* abc, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// ºÎµúÈù ¾×ÅÍ°¡ Bullet ÀÌ¶ó¸é 
 	if (OtherActor->GetName().Contains(TEXT("Bullet")))
