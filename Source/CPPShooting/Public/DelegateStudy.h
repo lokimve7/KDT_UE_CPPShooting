@@ -24,6 +24,11 @@ DECLARE_DYNAMIC_DELEGATE(FDynamicDel);
 // 매개변수가 있는 함수를 하나 등록할 수 있는 딜리게이트 (블루프린트에서 사용가능)
 DECLARE_DYNAMIC_DELEGATE_OneParam(FDynamicOneParamDel, FString, name);
 
+// 매개변수가 있는 함수를 여러개 등록할 수 있는 딜리게이트 (블루프린트에서 사용가능)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDynamicMultiTwoParamDel, int32, age, FString, name);
+
+// 반환값이 있는 함수를 등록하는 딜리게이트 RetVal
+DECLARE_DELEGATE_RetVal(int32, FDelegateTest);
 
 UCLASS()
 class CPPSHOOTING_API ADelegateStudy : public AActor
@@ -81,4 +86,15 @@ public:
 	FDynamicOneParamDel dynamicOneparamDel;
 	UFUNCTION()
 	void DynamicOneParamDel(FString name);
+
+	//---------------------------
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, VisibleAnywhere)
+	FDynamicMultiTwoParamDel dynamicMultiTwoParamDel;
+	UFUNCTION()
+	void DynamicMultiTwoParamDel1(int32 age, FString name);
+
+	UFUNCTION()
+	void DynamicMultiTwoParamDel2(int32 age, FString name);
+
+	FScriptDelegate del;
 };
