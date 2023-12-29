@@ -63,6 +63,7 @@ void ACBullet::Tick(float DeltaTime)
 	FVector vt = GetActorUpVector() * moveSpeed * DeltaTime;
 	FVector p = p0 + vt;
 	SetActorLocation(p);
+	
 }
 
 void ACBullet::SetAcitve(bool isActive)
