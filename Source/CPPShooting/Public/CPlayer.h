@@ -54,6 +54,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TArray<class ACBullet*> magazine;
 
+	// 한번에 발사되는 총알의 갯수
+	UPROPERTY(EditAnywhere)
+	int32 bulletCnt = 3;
+
 
 public:
 	//사용자 입력을 처리하는 함수

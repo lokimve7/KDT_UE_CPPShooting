@@ -203,25 +203,42 @@ void ACPlayer::InputFire()
 	//또는
 	//GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
 
-	// 0. 만약에 탄창에 총알이 있다면
-	if (magazine.Num() > 0)
+	FVector pos;
+	float halfValue = ((bulletCnt - 1) * 100) / 2.0f;
+
+	for (int32 i = 0; i < bulletCnt; i++)
 	{
-		// 1. 탄창의 0번째 총알을 지역변수에 담는다. 
-		ACBullet* bullet = magazine[0];
-		// 2. 담은 총알을 활성화 시킨다.
-		bullet->SetAcitve(true);
-		// 3. 담은 총알을 나(Player) 의 위치에 놓는다.
-		bullet->SetActorLocation(GetActorLocation());
-		// 4. 탄창에서 0번째를 뺀다.
-		magazine.RemoveAt(0);
-	}	
-	// 탄창에 총알 없다면
-	else
-	{
-		// 총알 생성
-		ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(bulletFactory, GetActorLocation(), GetActorRotation());
-		bullet->insertMagazineDel.BindUObject(this, &ACPlayer::InsertBullet);
+		pos = GetActorLocation();
+
+		// i == 0 pos.Y += 0;
+		// i == 1 pos.Y += 100;
+		// i == 2 pos.Y += 200;
+		pos.Y += i * 100;
+		pos.Y -= halfValue;
+
+		// 0. 만약에 탄창에 총알이 있다면
+		if (magazine.Num() > 0)
+		{
+			// 1. 탄창의 0번째 총알을 지역변수에 담는다. 
+			ACBullet* bullet = magazine[0];
+			// 2. 담은 총알을 활성화 시킨다.
+			bullet->SetAcitve(true);
+			// 3. 담은 총알을 나(Player) 의 위치에 놓는다.
+			bullet->SetActorLocation(pos);
+			// 총알의 회전값을 셋팅
+			bullet->SetActorRotation(FRotator(0, 0, 45));
+			// 4. 탄창에서 0번째를 뺀다.
+			magazine.RemoveAt(0);
+		}
+		// 탄창에 총알 없다면
+		else
+		{
+			// 총알 생성
+			ACBullet* bullet = GetWorld()->SpawnActor<ACBullet>(bulletFactory, pos, GetActorRotation());
+			bullet->insertMagazineDel.BindUObject(this, &ACPlayer::InsertBullet);
+		}
 	}
+	
 
 	// 총알 발사 소리
 	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);

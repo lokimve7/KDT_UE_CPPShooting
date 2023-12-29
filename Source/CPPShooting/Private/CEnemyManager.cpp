@@ -33,6 +33,7 @@ void ACEnemyManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	return;
 	// 필요한 멤버변수 : 현재시간, 생성시간, EnemyFactory(EnemyBlueprint)
 	
 	// 1. 현재시간을 흐르게 한다.
